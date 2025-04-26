@@ -2,7 +2,6 @@ import numpy as np
 from PIL import Image
 import glob
 import os
-from src.config import TRAIN_DIR
 
 def load_images_from_folder(
     folder,
@@ -56,7 +55,7 @@ def load_images_from_folder(
 
 # Example usage:
 if __name__ == "__main__":
-    X, y = load_images_from_folder(TRAIN_DIR, img_size=(94,125), max_images_per_class=2048)
+    X, y = load_images_from_folder('train/', img_size=(94,125), max_images_per_class=2048)
     print("Loaded shape:", X.shape, y.shape)
     print("First 10 labels:", y[:10])
     print("First 10 images shape:", X[:10].shape)
