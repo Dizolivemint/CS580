@@ -16,7 +16,7 @@ LEARNING_RATE = 1e-4
 
 # Training settings
 BATCH_SIZE = 32
-EPOCHS = 10
+EPOCHS = 10  # Changed from 3 to 10 as per assignment
 VALID_SIZE = 0.1
 EARLY_STOPPING = True
 PATIENCE = 2
