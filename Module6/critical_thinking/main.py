@@ -28,7 +28,7 @@ def main():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
     
-    # 1. Load data
+    # Load data
     print("Loading images...")
     X, y = load_images_from_folder(
         TRAIN_DIR,
@@ -39,7 +39,7 @@ def main():
     )
     print(f"Loaded {len(X)} images.")
     
-    # 2. Create data loaders
+    # Create data loaders
     print("Creating data loaders...")
     train_loader, valid_loader, train_dataset, valid_dataset = create_data_loaders(
         X, y, batch_size=BATCH_SIZE, valid_size=VALID_SIZE, seed=SEED
@@ -47,7 +47,7 @@ def main():
     print(f"Train set: {len(train_dataset)} images")
     print(f"Validation set: {len(valid_dataset)} images")
     
-    # 3. Build model
+    # Build model
     print("Building model...")
     img_shape = (3, IMG_SIZE[0], IMG_SIZE[1])  # PyTorch expects (C, H, W)
     model, optimizer, criterion = build_cnn_model(
@@ -58,7 +58,7 @@ def main():
         learning_rate=LEARNING_RATE
     )
     
-    # 4. Train model
+    # Train model
     print("Training model...")
     model, history = train_model(
         model, 
@@ -73,7 +73,7 @@ def main():
         verbose=1
     )
     
-    # 5. Evaluate model
+    # Evaluate model
     print("Evaluating model...")
     y_pred_probs, y_valid = predict(model, valid_loader, device)
     
@@ -93,7 +93,7 @@ def main():
     for k, v in metrics_best.items():
         print(f"{k.capitalize()}: {v:.4f}" if isinstance(v, float) else f"{k.capitalize()}: {v}")
     
-    # 6. Plot scatter plot of predictions vs labels
+    # Plot scatter plot of predictions vs labels
     plt.figure(figsize=(10, 6))
     sns.scatterplot(x=y_pred_probs, y=y_valid)
     plt.title("Scatter Plot of Predictions vs Labels")
@@ -106,11 +106,25 @@ def main():
     plt.savefig(os.path.join(MODEL_DIR, f"{MODEL_NAME}_scatter.png"))
     plt.close()
     
-    # 7. Save model
+    cat_quantity = np.sum(y_valid)
+
+    for i in range(1, 10):
+        threshold = 0.1 * i
+        # Select predictions above threshold
+        idx = y_pred_probs > threshold
+        if np.sum(idx) > 0:  # Avoid division by zero if no predictions above threshold
+            percent_cats = np.sum(y_valid[idx]) / np.sum(idx)
+            print(f"threshold: {threshold:.1f}")
+            print(f"percent of cats above threshold: {percent_cats:.4f}")
+        else:
+            print(f"threshold: {threshold:.1f}")
+            print("No predictions above this threshold.")
+    
+    # Save model
     model_path = os.path.join(MODEL_DIR, f"{MODEL_NAME}.pt")
     save_model(model, model_path)
     
-    # 8. Save threshold and metrics
+    # Save threshold and metrics
     with open(os.path.join(MODEL_DIR, f"{MODEL_NAME}_metrics.json"), "w") as f:
         # Convert numpy float32 to native Python float
         metrics_default = {k: float(v) if isinstance(v, np.float32) else v for k, v in metrics_default.items()}
@@ -124,7 +138,7 @@ def main():
     
     print("Evaluation complete!")
     
-    # 9. Create an interface to visualize predictions
+    # Create an interface to visualize predictions
     # This is implemented in the use_model.py file
     print("Use the interface in use_model.py to visualize predictions!")
 
