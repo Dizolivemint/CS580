@@ -3,7 +3,4 @@
 *.exe
 *.zip
 *.jpg
-*.png
-*.pt
 *.pyc
-cnn_cats_dogs_metrics.json
