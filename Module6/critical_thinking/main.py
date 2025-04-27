@@ -137,10 +137,6 @@ def main():
         json.dump(combined_metrics, f, indent=4)
     
     print("Evaluation complete!")
-    
-    # Create an interface to visualize predictions
-    # This is implemented in the use_model.py file
-    print("Use the interface in use_model.py to visualize predictions!")
 
 if __name__ == "__main__":
     main()
