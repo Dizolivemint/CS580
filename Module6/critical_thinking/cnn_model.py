@@ -64,6 +64,8 @@ def build_cnn_model(img_shape, conv_filters=24, conv2_filters=None, dense_units=
     # Create model, optimizer, and loss function
     model = CatDogCNN()
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-    criterion = nn.BCELoss()
+    
+    # Use MSELoss for regression
+    criterion = nn.MSELoss()
     
     return model, optimizer, criterion
